@@ -4,7 +4,7 @@ import Account from './account';
 import ImageHosting from './imageHosting';
 import Extensions from './extensions';
 import { CenterContainer } from 'components/container';
-import { router, connect } from 'dva';
+import { router } from 'dva';
 
 import {
   CloseOutlined,
@@ -14,14 +14,13 @@ import {
   SettingOutlined,
 } from '@ant-design/icons';
 
-import { Tabs, Badge, message } from 'antd';
+import { Tabs, Badge } from 'antd';
 import { FormattedMessage } from 'react-intl';
 import Base from './base';
-import { DvaRouterProps, GlobalStore } from '@/common/types';
+import { DvaRouterProps } from '@/common/types';
 import Changelog from './changelog';
 import IconFont from '@/components/IconFont';
 import Privacy from './privacy';
-import locale from '@/common/locales';
 import Container from 'typedi';
 import { IConfigService } from '@/service/common/config';
 import { useObserver } from 'mobx-react';
@@ -29,13 +28,6 @@ import { useObserver } from 'mobx-react';
 const { Route } = router;
 
 const TabPane = Tabs.TabPane;
-
-const mapStateToProps = ({ account: { accounts } }: GlobalStore) => {
-  return {
-    accounts,
-  };
-};
-type PageStateProps = ReturnType<typeof mapStateToProps>;
 
 const tabs = [
   {
@@ -78,23 +70,13 @@ const tabs = [
   },
 ];
 
-type PageProps = DvaRouterProps & PageStateProps;
+type PageProps = DvaRouterProps;
 
 const Preference: React.FC<PageProps> = ({
   location: { pathname },
   history: { push },
-  accounts,
 }) => {
   const goHome = () => {
-    if (accounts.length === 0) {
-      message.error(
-        locale.format({
-          id: 'preference.bind.message',
-          defaultMessage: 'You need to bind an account before you can use it.',
-        })
-      );
-      return;
-    }
     push('/');
   };
 
@@ -134,4 +116,4 @@ const Preference: React.FC<PageProps> = ({
   );
 };
 
-export default connect(mapStateToProps)(Preference);
+export default Preference;

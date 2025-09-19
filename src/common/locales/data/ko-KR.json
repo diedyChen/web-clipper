@@ -185,6 +185,9 @@
   "tool.repository": "저장소",
   "tool.save": "컨텐츠 저장",
   "tool.saveButton.noRepository": "저장소를 선택하세요",
+  "tool.save.noAccount": "계정이 연결되지 않았습니다. 대신 내용을 복사하거나 다운로드하세요.",
+  "tool.save.copy": "클립보드에 복사",
+  "tool.save.download": "Markdown 다운로드",
   "tool.title": "컨텐츠 저장",
   "tool.title.required": "제목을 입력해주세요",
   "tool.toolExtensions": "도구 확장"

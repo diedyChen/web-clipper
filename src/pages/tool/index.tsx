@@ -97,15 +97,6 @@ const Page = React.memo<PageProps>(
 
     const currentService = currentAccount ? servicesMeta[currentAccount.type] : null;
 
-    useEffect(() => {
-      if (pathname === '/') {
-        if (accounts.length === 0) {
-          dispatch(routerRedux.push('/preference/account'));
-          return;
-        }
-      }
-    }, [accounts.length, dispatch, pathname]);
-
     const onRepositorySelect = useCallback(
       (repositoryId: string) => {
         dispatch(selectRepository({ repositoryId }));
@@ -151,9 +142,10 @@ const Page = React.memo<PageProps>(
           pathname={pathname}
           service={currentService}
           currentRepository={currentRepository}
+          hasAccount={accounts.length > 0}
         />
       );
-    }, [pathname, currentService, currentRepository]);
+    }, [accounts.length, pathname, currentService, currentRepository]);
 
     const overlay = useMemo(() => {
       return (
