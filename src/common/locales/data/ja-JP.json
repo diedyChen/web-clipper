@@ -185,6 +185,9 @@
   "tool.repository": "",
   "tool.save": "コンテンツを保存する",
   "tool.saveButton.noRepository": "",
+  "tool.save.noAccount": "アカウントが連携されていません。代わりに内容をコピーするかダウンロードしてください。",
+  "tool.save.copy": "クリップボードにコピー",
+  "tool.save.download": "Markdown をダウンロード",
   "tool.title": "記事タイトル",
   "tool.title.required": "",
   "tool.toolExtensions": ""

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import { Form } from '@ant-design/compatible';
 import '@ant-design/compatible/assets/index.less';
 import { Input, Button } from 'antd';
@@ -9,15 +9,21 @@ import styles from './index.less';
 import { useSelector, useDispatch } from 'dva';
 import { GlobalStore, ClipperHeaderForm } from '@/common/types';
 import { updateClipperHeader, asyncCreateDocument } from '@/actions/clipper';
+import { asyncRunExtension } from '@/actions/userPreference';
 import { isEqual } from 'lodash';
 import { ServiceMeta, Repository } from '@/common/backend';
 import classNames from 'classnames';
 import localeService from '@/common/locales';
+import Container from 'typedi';
+import { IExtensionContainer } from '@/service/common/extension';
+import { IExtensionWithId } from '@/extensions/common';
+import { useObserver } from 'mobx-react';
 
 type PageProps = FormComponentProps & {
   pathname: string;
   service: ServiceMeta | null;
   currentRepository?: Repository;
+  hasAccount: boolean;
 };
 
 const ClipperHeader: React.FC<PageProps> = props => {
@@ -27,6 +33,7 @@ const ClipperHeader: React.FC<PageProps> = props => {
     pathname,
     service,
     currentRepository,
+    hasAccount,
   } = props;
   const formValue = getFieldsValue() as ClipperHeaderForm;
   const ref = useRef<ClipperHeaderForm>(formValue);
@@ -37,6 +44,25 @@ const ClipperHeader: React.FC<PageProps> = props => {
     };
   }, isEqual);
   const dispatch = useDispatch();
+
+  const fallbackExtensions = useObserver(() => {
+    const availableExtensions = Container.get(IExtensionContainer).extensions;
+    const findExtension = (id: string) => availableExtensions.find(o => o.id === id);
+    return {
+      copy: findExtension('web-clipper/copyToClipboard'),
+      download: findExtension('web-clipper/download'),
+    } as Record<'copy' | 'download', IExtensionWithId | undefined>;
+  });
+
+  const runFallbackExtension = useCallback(
+    (extension?: IExtensionWithId) => {
+      if (!extension) {
+        return;
+      }
+      dispatch(asyncRunExtension.started({ pathname, extension }));
+    },
+    [dispatch, pathname]
+  );
 
   useEffect(() => {
     if (isEqual(clipperHeaderForm, ref.current)) {
@@ -83,24 +109,58 @@ const ClipperHeader: React.FC<PageProps> = props => {
         })(<Input placeholder="Please Input Title" />)}
       </Form.Item>
       {headerForm}
-      <Button
-        className={styles.saveButton}
-        size="large"
-        type="primary"
-        title={
-          !currentRepository
-            ? localeService.format({
-                id: 'tool.saveButton.noRepository',
-              })
-            : ''
-        }
-        onClick={handleSubmit}
-        loading={loading}
-        disabled={loading || pathname === '/' || !currentRepository}
-        block
-      >
-        <FormattedMessage id="tool.save" defaultMessage="Save Content" />
-      </Button>
+      {hasAccount ? (
+        <Button
+          className={styles.saveButton}
+          size="large"
+          type="primary"
+          title={
+            !currentRepository
+              ? localeService.format({
+                  id: 'tool.saveButton.noRepository',
+                })
+              : ''
+          }
+          onClick={handleSubmit}
+          loading={loading}
+          disabled={loading || pathname === '/' || !currentRepository}
+          block
+        >
+          <FormattedMessage id="tool.save" defaultMessage="Save Content" />
+        </Button>
+      ) : (
+        <div className={styles.saveFallback}>
+          <p className={styles.saveFallbackMessage}>
+            <FormattedMessage
+              id="tool.save.noAccount"
+              defaultMessage="No account connected. Copy or download the content instead."
+            />
+          </p>
+          <Button
+            block
+            className={styles.saveFallbackButton}
+            onClick={() => runFallbackExtension(fallbackExtensions.copy)}
+            disabled={!fallbackExtensions.copy}
+            type="primary"
+          >
+            <FormattedMessage
+              id="tool.save.copy"
+              defaultMessage="Copy to Clipboard"
+            />
+          </Button>
+          <Button
+            block
+            className={styles.saveFallbackButton}
+            onClick={() => runFallbackExtension(fallbackExtensions.download)}
+            disabled={!fallbackExtensions.download}
+          >
+            <FormattedMessage
+              id="tool.save.download"
+              defaultMessage="Download Markdown"
+            />
+          </Button>
+        </div>
+      )}
     </Section>
   );
 };

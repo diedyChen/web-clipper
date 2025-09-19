@@ -188,6 +188,9 @@
   "tool.repository": "知識庫",
   "tool.save": "保存內容",
   "tool.saveButton.noRepository": "",
+  "tool.save.noAccount": "未綁定帳號。可以改為複製內容或下載檔案。",
+  "tool.save.copy": "複製到剪貼簿",
+  "tool.save.download": "下載 Markdown",
   "tool.title": "筆記標題",
   "tool.title.required": "請輸入筆記標題",
   "tool.toolExtensions": "工具擴展"

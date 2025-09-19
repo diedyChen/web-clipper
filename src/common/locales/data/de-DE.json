@@ -185,6 +185,9 @@
   "tool.repository": "Repository",
   "tool.save": "Inhalt speichern",
   "tool.saveButton.noRepository": "Bitte wählen Sie ein Repository aus.",
+  "tool.save.noAccount": "Kein Konto verbunden. Kopieren oder laden Sie den Inhalt stattdessen herunter.",
+  "tool.save.copy": "In die Zwischenablage kopieren",
+  "tool.save.download": "Markdown herunterladen",
   "tool.title": "Titel",
   "tool.title.required": "Titel ist erforderlich",
   "tool.toolExtensions": "Tool-Erweiterung"

@@ -186,6 +186,9 @@
   "tool.repository": "Repository",
   "tool.save": "Save Content",
   "tool.saveButton.noRepository": "Please select a repository",
+  "tool.save.noAccount": "No account connected. Copy or download the content instead.",
+  "tool.save.copy": "Copy to Clipboard",
+  "tool.save.download": "Download Markdown",
   "tool.title": "Title",
   "tool.title.required": "Title is Required",
   "tool.toolExtensions": "Tool Extension"

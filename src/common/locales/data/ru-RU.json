@@ -185,6 +185,9 @@
   "tool.repository": "",
   "tool.save": "",
   "tool.saveButton.noRepository": "",
+  "tool.save.noAccount": "Аккаунт не подключён. Вместо этого скопируйте или скачайте содержимое.",
+  "tool.save.copy": "Копировать в буфер",
+  "tool.save.download": "Скачать Markdown",
   "tool.title": "Сохранить контент",
   "tool.title.required": "",
   "tool.toolExtensions": ""
